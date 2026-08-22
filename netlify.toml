@@ -1,0 +1,6 @@
+[build]
+  publish = "public"
+
+# The site is a static single-page app — no build step needed.
+# The `public/_redirects` file rewrites every route to index.html
+# so deep links like /plans, /timer or /syllabus work on refresh.
