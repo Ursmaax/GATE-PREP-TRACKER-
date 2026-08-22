@@ -62,18 +62,26 @@ easy to hack on.
 
 | 🧰 Tool | 💡 What it does |
 |:---|:---|
-| **⏱️ Pomodoro Focus Timer** | 25/50 min, 1/2/3 hour presets · animated progress ring · subject tracking |
-| **📚 Syllabus Tracker** | Every GATE CSE subject & topic · tap-to-complete · live progress bars |
+| **⏱️ Pomodoro Focus Timer** | 25/50 min, 1/2/3 hour presets · animated progress ring · subject tracking · confetti on finish |
+| **📚 Syllabus Tracker** | Every GATE CSE subject & topic · tap-to-complete · live progress bars · donut chart |
 | **📝 Test Series & Analytics** | Log any test · per-subject averages · best score · history table |
 | **📅 Study Calendar** | Monthly heatmap · click any day to view or log study sessions |
-| **🏆 Leaderboard** | Rank by study hours or questions solved · compete with aspirants |
+| **🏆 Leaderboard** | Rank by study hours or questions solved · tap a name for a **public profile** |
+| **👤 Profile** | Your account, trial status & prep summary |
+| **🔗 Text & Link Share** | Save notes, links & resources · copy in one tap |
 | **🗒️ Notes** | All notes in one place · tags · one-tap share |
 | **✅ To-do List** | Advanced task planner with open/done filters |
 | **❓ Concepts & Doubts** | Log doubts by subject · resolve & reopen |
 | **🔎 GATE PYQ Find** | Curated PYQ-style questions with instant answer reveal |
 | **⚔️ Practice Arena** | Rapid-fire 5-question sets with accuracy tracking |
 | **👨‍🏫 Konsa Teacher** | Lock one resource per subject & stay consistent |
+| **🔔 Notifications** | In-app bell with unread badge |
 | **⏳ GATE Countdown** | Live day/hour/min/sec countdown to GATE 2027 |
+| **🔍 Global Search** | Search every tool, subject & note instantly |
+
+> ✨ **Premium dark UI** — sidebar navigation, animated stat count-ups,
+> gradient hero, SVG donut chart, study heatmap, growth tree, and
+> micro-interactions throughout.
 
 </div>
 
@@ -174,13 +182,15 @@ GATE-PREP-TRACKER-/
 Every route and every core flow is verified:
 
 ```text
-✅ 13+ public routes render with zero JS errors
-✅ 18/18 interaction tests passing
+✅ 13 public routes render with zero JS errors
+✅ 15 app routes render with zero JS errors
+✅ 18/18 core interaction tests passing
    ├── signup validation        ├── login (valid + invalid)
    ├── Google sign-in           ├── syllabus toggle
    ├── timer presets            ├── add todo
    ├── add test                 ├── practice arena scoring
-   └── auth guard redirects
+   ├── share page               ├── public profile modal
+   └── global search + auth guard
 ```
 
 <br/>
@@ -193,7 +203,10 @@ Every route and every core flow is verified:
 - [x] Calendar heatmap & streaks
 - [x] Notes · to-dos · doubts
 - [x] PYQ Find & Practice Arena
-- [x] Leaderboard
+- [x] Text & Link Share
+- [x] Public profiles & leaderboard
+- [x] In-app notifications & global search
+- [x] Premium animated dark UI
 - [x] Netlify-ready config
 - [ ] Cloud sync across devices
 - [ ] Real Google OAuth
