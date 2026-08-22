@@ -1,0 +1,13 @@
+{
+  "name": "g4gate-clone",
+  "version": "1.0.0",
+  "description": "G4Gate — Study Tracker for GATE and DSA Aspirants (faithful clone)",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
