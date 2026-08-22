@@ -6,12 +6,7 @@ window.G4_DATA = {
   site: {
     name: "G4Gate",
     tagline: "The tracking and preparation ecosystem for GATE and DSA aspirants. Stay consistent, track your progress, and get where you're going.",
-    email: "contactprincemedia@gmail.com",
-    phone: "+91 9516067571",
-    phoneHref: "https://wa.me/919516067571",
-    youtube: "https://www.youtube.com/@G4Gate",
-    whatsappDoubt: "https://chat.whatsapp.com/CHcvbxCDeaVIQOXWXDUieM",
-    whatsappUpdates: "https://chat.whatsapp.com/EPnHZmLO9KaLdC2bGKyRgn",
+    creator: { name: "Uma Mahesh", thanks: "G4Gate" },
     year: 2026,
     gateYear: 2027,
     // GATE 2027 examination window (CS typically first weekend of Feb)
@@ -251,12 +246,12 @@ window.G4_DATA = {
 
   faq: [
     {
-      q: "Why is G4Gate becoming paid?",
-      a: "Running a platform like G4Gate 24×7 involves real costs for servers, databases, and hosting. The user base has grown significantly, requiring more resources. These minimal plans will ensure the platform remains stable and available for all aspirants until GATE 2027 without compromising on speed or reliability.",
+      q: "Why is there a paid plan?",
+      a: "Running a platform like this 24×7 involves real costs for servers, databases, and hosting. These minimal plans ensure the platform remains stable and available for all aspirants until GATE 2027 without compromising on speed or reliability.",
     },
     {
       q: "Is there a free trial?",
-      a: "Yes! We are providing a 21-day free trial for every aspirant so you can experience everything the platform has to offer. In addition, the platform has been completely free for everyone during its first 2 months.",
+      a: "Yes! Every aspirant gets a 21-day free trial so you can experience everything the platform has to offer.",
     },
     {
       q: "Do I need to add payment details for the trial?",
@@ -264,11 +259,11 @@ window.G4_DATA = {
     },
     {
       q: "What happens after 21 days?",
-      a: "After the 21 days, you will be prompted to choose one of our minimal plans (like ₹29/month or ₹129 for 5 months) to continue accessing G4Gate and tracking your preparation. If you choose not to subscribe, your data will remain safe, but access may be restricted.",
+      a: "After the 21 days, you will be prompted to choose one of our minimal plans (like ₹29/month or ₹129 for 5 months) to continue accessing the tracker and tracking your preparation. If you choose not to subscribe, your data will remain safe, but access may be restricted.",
     },
     {
       q: "Are you doing this to make money?",
-      a: "Absolutely not. The prices are intentionally kept as low as possible just to cover the operational and server costs. G4Gate was built by an aspirant for aspirants to succeed, not as a business to make profits.",
+      a: "Absolutely not. The prices are intentionally kept as low as possible just to cover the operational and server costs. This tracker was built by an aspirant for aspirants to succeed, not as a business to make profits.",
     },
     {
       q: "Are the plans refundable?",

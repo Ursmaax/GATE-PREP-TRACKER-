@@ -568,6 +568,8 @@ select.input option { background: var(--bg-2); }
 .footer-col a:hover { color: var(--text); }
 .footer-brand .brand { font-size: 1.25rem; margin-bottom: 12px; }
 .footer-brand p { color: var(--muted); font-size: 0.88rem; max-width: 340px; margin: 0 0 16px; }
+.creator-credit { color: var(--muted); font-size: 0.86rem; margin: 0; }
+.creator-credit b { color: #34d399; font-weight: 700; }
 .socials { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .social {
   display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px;

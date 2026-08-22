@@ -141,10 +141,7 @@
           <div class="footer-col footer-brand">
             <div class="brand">${logoHTML(1)}</div>
             <p>${esc(SITE.tagline)}</p>
-            <div class="socials">
-              <a class="social" href="${SITE.youtube}" target="_blank" rel="noopener" title="G4Gate YouTube Channel">${ICONS.yt} YouTube</a>
-              <a class="social" href="mailto:${SITE.email}">${ICONS.mail} ${esc(SITE.email)}</a>
-            </div>
+            <p class="creator-credit">Created by <b>${esc(SITE.creator.name)}</b> · Thanks to ${esc(SITE.creator.thanks)}</p>
           </div>
           <div class="footer-col">
             <h4>Quick Links</h4>
@@ -155,17 +152,12 @@
             ${legal.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}
           </div>
           <div class="footer-col">
-            <h4>Community</h4>
-            <p style="font-size:.85rem">Join our communities for strategies, test analysis, and updates.</p>
-            <div class="socials" style="flex-direction:column;align-items:flex-start">
-              <a class="social" href="${SITE.youtube}" target="_blank" rel="noopener">${ICONS.yt} Subscribe to G4Gate</a>
-              <a class="social" href="${SITE.whatsappDoubt}" target="_blank" rel="noopener">${ICONS.wa} Doubt Group</a>
-              <a class="social" href="${SITE.whatsappUpdates}" target="_blank" rel="noopener">${ICONS.wa} App Updates</a>
-            </div>
+            <h4>Creator</h4>
+            <p class="creator-credit" style="margin-top:0">This tracker was created by <b>${esc(SITE.creator.name)}</b>, with thanks to ${esc(SITE.creator.thanks)} for the original idea.</p>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© ${SITE.year} G4Gate Tracker. All rights reserved.</span>
+          <span>© ${SITE.year} ${esc(SITE.creator.name)} · Thanks to ${esc(SITE.creator.thanks)}. All rights reserved.</span>
           <div class="links">${bottom.map(([l, h]) => `<a href="${h}">${l}</a>`).join("")}</div>
         </div>
       </div>
@@ -300,11 +292,9 @@
     },
     contact: {
       title: "Contact Us", sub: "We are here to help and answer any questions you might have.", date: "",
-      body: `<p>If you have any queries, feedback, or issues related to our platform, feel free to reach out to us. We aim to respond to all inquiries within 24-48 hours.</p>
-      <h3>Email Support</h3><p>For general queries and technical support.</p>
-      <p><a href="mailto:${SITE.email}">${SITE.email}</a></p>
-      <h3>WhatsApp / Phone</h3><p>Message us on WhatsApp for quick assistance.</p>
-      <p><a href="${SITE.phoneHref}" target="_blank" rel="noopener">${SITE.phone}</a></p>`,
+      body: `<p>If you have any queries, feedback, or issues related to this platform, feel free to reach out.</p>
+      <h3>Creator</h3>
+      <p>This tracker was created by <b>${esc(SITE.creator.name)}</b>, with thanks to ${esc(SITE.creator.thanks)} for the original idea.</p>`,
     },
     privacy: {
       title: "Privacy Policy", sub: "How we handle and protect your data.", date: "8/21/2026",
@@ -329,7 +319,7 @@
       <h2>4. Data Security</h2>
       <p>We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used, or accessed in an unauthorized way, altered, or disclosed. In addition, we limit access to your personal data to those employees, agents, contractors, and other third parties who have a business need to know.</p>
       <h2>5. Contact Us</h2>
-      <p>If you have any questions about this Privacy Policy, please contact us at or visit our <a href="/contact">Contact Page</a>.</p>`,
+      <p>If you have any questions about this Privacy Policy, please visit our <a href="/contact">Contact Page</a>.</p>`,
     },
     terms: {
       title: "Terms & Conditions", sub: "Rules and guidelines for using G4Gate.", date: "8/21/2026",
@@ -354,7 +344,7 @@
       <h2>8. Changes to Terms</h2>
       <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will try to provide at least 30 days notice prior to any new terms taking effect.</p>
       <h2>9. Contact Us</h2>
-      <p>If you have any questions about these Terms, please contact us at .</p>`,
+      <p>If you have any questions about these Terms, please visit our <a href="/contact">Contact Page</a>.</p>`,
     },
     refund: {
       title: "Cancellation & Refund Policy", sub: "Information on our policies regarding cancellations and refunds.", date: "8/21/2026",
@@ -371,7 +361,7 @@
         <li>Failure to deliver the digital service or grant access to the account, which our support team is unable to resolve within 7 days of the transaction.</li>
       </ul>
       <h2>4. Process for Requesting a Refund</h2>
-      <p>If your case falls under the exceptions above, please contact us within 7 days of the transaction date at or via WhatsApp at <b>${SITE.phone}</b> with your payment receipt and transaction ID. We will review your request and process approved refunds back to the original method of payment within 5-7 business days.</p>`,
+      <p>If your case falls under the exceptions above, please contact us within 7 days of the transaction date with your payment receipt and transaction ID. We will review your request and process approved refunds back to the original method of payment within 5-7 business days.</p>`,
     },
     shipping: {
       title: "Shipping & Delivery Policy", sub: "Delivery details for our digital products and subscriptions.", date: "8/21/2026",
@@ -386,7 +376,7 @@
       </ul>
       <h2>3. Access Issues or Delays</h2>
       <p>In rare cases, there might be a slight delay in upgrading your account due to payment gateway processing times. If you have completed a payment but your digital access is not active within 15-30 minutes, please contact our support team immediately with your transaction ID.</p>
-      <p>Contact us via WhatsApp at <b>${SITE.phone}</b> or email us at <b>contact@g4gate.com</b>, and we will manually verify and activate your services without delay.</p>`,
+      <p>Contact our support team with your transaction ID, and we will manually verify and activate your services without delay.</p>`,
     },
   };
 
@@ -1165,40 +1155,12 @@
       </div>`).join("");
     const letter = `
       <p><b>Dear Aspirants,</b></p>
-      <p>Today, G4Gate has successfully completed <b>1 Month and 7 Days</b> since its launch on <b>6th July 2026</b>.</p>
-      <p>I genuinely feel very happy seeing how many of you are actively using the platform every day. Today, around <b>150–200 aspirants</b> use G4Gate actively each day, with around <b>600 daily visits</b>. Seeing this platform actually becoming useful in your GATE 2027 preparation means a lot to me.</p>
-      <div class="row" style="gap:10px;margin:18px 0">
-        <button class="btn btn-soft" data-action="analytics-modal">📊 View G4Gate Analytics</button>
-      </div>
-      <p>But I also want to be transparent with you about something.</p>
-      <p>Running a platform like G4Gate comes with a real cost — servers, hosting, databases, and everything required to keep the website available 24×7, so that every aspirant can continue tracking their preparation, practising, and competing with others.</p>
-      <p>On 13th July, we actually reached a point where we had to temporarily restrict the platform because the increasing number of new sign-ups and users was becoming difficult to handle with the existing hosting.</p>
-      <p>When I shared this with you in our WhatsApp group, something happened that I will genuinely never forget.</p>
-      <div class="quote">"Aspirants themselves started contributing to keep G4Gate alive."</div>
-      <p>Some contributed ₹100, some ₹200, and even ₹1,600. Within around 1 hour and 30 minutes, we had collected enough to purchase the required hosting, and G4Gate was live again.</p>
-      <p>I was honestly overwhelmed by that support.</p>
-      <p>When I later told my family about this, my father told me that I shouldn't take such a large financial burden from students who are themselves preparing for an exam. He said that whatever was required to keep G4Gate running, he would support it.</p>
-      <p>So, at that time, contributions above ₹100 were returned to the respective aspirants, and I personally informed them about it.</p>
-      <p>After that, my father and I decided that he would support the hosting expenses for the first two months, so that G4Gate could continue without putting pressure on the students.</p>
-      <p>And today, we have successfully completed the first of those two months.</p>
-      <h3>What happens from 1st September?</h3>
-      <p>G4Gate will continue to remain available, and every aspirant will get a <b>21-day free trial</b>.</p>
-      <p>You don't need to provide any payment information to start the trial.</p>
-      <p>After the 21-day free trial, we will have to introduce a few minimal paid plans, simply because the platform needs to cover its hosting and operational costs to remain available.</p>
-      <p>The plans will be</p>
-      <div class="grid-2 mb-2" style="max-width:480px">
-        <div class="card" style="text-align:center"><div style="font-size:1.6rem;font-weight:800">₹29<span class="per muted" style="font-size:.9rem">/month</span></div></div>
-        <div class="card" style="text-align:center;border-color:rgba(16,185,129,.4)"><div class="muted" style="font-size:.72rem;letter-spacing:.1em">TILL GATE 2027</div><div style="font-size:1.6rem;font-weight:800">₹129 <span class="muted" style="font-size:.9rem">For 5 Months</span></div><div class="muted" style="font-size:.78rem">(Effective cost: ₹25.8/month)</div></div>
-      </div>
-      <p>These prices have intentionally been kept as low as possible because G4Gate was created for aspirants, not as a business to make money from aspirants.</p>
-      <p>The purpose of these plans is simply to help us sustain the hosting, servers and other costs, and keep G4Gate running for everyone.</p>
-      <p>The plans will become available from 1st September 2026, after your free trial period.</p>
-      <p>If G4Gate has helped you even a little in your GATE 2027 preparation, I hope you will continue this journey with us.</p>
-      <p>And once again, thank you to everyone who supported G4Gate on 13th July when we genuinely needed your help.</p>
-      <p>That support is something I will always remember.</p>
-      <p>Let's keep preparing. Let's keep improving.</p>
-      <p>And let's reach GATE 2027 together.</p>
-      <p><b>— G4Gate</b></p>`;
+      <p>Thank you for using this tracker. I built it to make GATE &amp; DSA preparation easier to track — your study hours, tests, syllabus progress and streaks, all in one place.</p>
+      <p>Stay consistent, track your progress, and get where you're going. Let's keep preparing, let's keep improving — and let's reach GATE ${SITE.gateYear} together.</p>
+      <div class="quote">"Stay consistent today, thank yourself on exam day."</div>
+      <p>Every aspirant gets a <b>21-day free trial</b> — no payment details needed to start.</p>
+      <p><b>— ${esc(SITE.creator.name)}</b></p>
+      <p class="muted" style="font-size:.85rem">Created by ${esc(SITE.creator.name)} · Thanks to ${esc(SITE.creator.thanks)} for the original idea.</p>`;
     return `
     <div class="bg-grid"></div>
     <div style="min-height:100vh;display:flex;flex-direction:column">
@@ -1206,7 +1168,7 @@
         <div class="letter">
           <div class="card">${letter}</div>
           <h2 class="center mt-3 mb-2">Frequently Asked Questions</h2>
-          <p class="center muted mb-3" style="margin-top:-6px">To help you understand this transition better</p>
+          <p class="center muted mb-3" style="margin-top:-6px">To help you understand the plans better</p>
           ${faq}
         </div>
       </div>
