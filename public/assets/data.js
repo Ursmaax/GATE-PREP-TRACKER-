@@ -35,6 +35,8 @@ window.G4_DATA = {
     { id: "pyq", label: "PYQ Find", href: "/pyq", icon: "🔎", desc: "Previous year questions" },
     { id: "practice", label: "Practice Arena", href: "/practice", icon: "⚔️", desc: "Quick practice sets" },
     { id: "teachers", label: "Konsa Teacher", href: "/teachers", icon: "👨‍🏫", desc: "Pick resources per subject" },
+    { id: "share", label: "Text & Link Share", href: "/share", icon: "🔗", desc: "Quickly share notes, links & resources" },
+    { id: "profile", label: "Profile", href: "/profile", icon: "👤", desc: "Your account & public profile" },
     { id: "prepare", label: "How to Prepare", href: "/prepare-for-gate", icon: "🧭", desc: "GATE prep roadmap" },
   ],
 

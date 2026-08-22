@@ -385,56 +385,103 @@
      ============================================================ */
   function appShell(contentHTML, active) {
     const u = meUser();
-    const tools = [
-      ["Notes", "/notes", "🗒️"], ["To-do List", "/todos", "✅"], ["Concepts & Doubts", "/doubts", "❓"],
-      ["Practice Arena", "/practice", "⚔️"], ["GATE PYQ Find", "/pyq", "🔎"], ["Konsa Teacher", "/teachers", "👨‍🏫"],
-      ["How to Prepare", "/prepare-for-gate", "🧭"],
-    ];
-    const main = D.nav;
-    const navLinks = main.map((n) => `<a href="${n.href}" class="${active === n.href ? "active" : ""}">${n.label}</a>`).join("");
-    const moreLinks = tools.map(([l, h, ic]) => `<a href="${h}">${ic} ${l}</a>`).join("");
     const unread = notifyList().length;
+    const NAV_ICONS = {
+      "/": "🏠", "/syllabus": "📚", "/timer": "⏱️", "/tests": "📝",
+      "/calendar": "📅", "/leaderboard": "🏆", "/plans": "💳", "/notes": "🗒️",
+      "/todos": "✅", "/doubts": "❓", "/pyq": "🔎", "/practice": "⚔️",
+      "/teachers": "👨‍🏫", "/prepare-for-gate": "🧭", "/share": "🔗", "/profile": "👤",
+    };
+    const TITLE = {
+      "/": "Dashboard", "/syllabus": "Syllabus Tracker", "/timer": "Pomodoro Timer",
+      "/tests": "Test Series", "/calendar": "Calendar", "/leaderboard": "Leaderboard",
+      "/plans": "Pricing Plans", "/notes": "Notes", "/todos": "To-do List",
+      "/doubts": "Concepts & Doubts", "/pyq": "GATE PYQ Find", "/practice": "Practice Arena",
+      "/teachers": "Konsa Teacher", "/prepare-for-gate": "How to Prepare", "/share": "Text & Link Share", "/profile": "Profile",
+    };
+    const mainItems = [
+      ["/", "Dashboard"], ["/syllabus", "Syllabus"], ["/timer", "Timer"],
+      ["/tests", "Tests"], ["/calendar", "Calendar"], ["/leaderboard", "Leaderboard"],
+    ];
+    const toolItems = [
+      ["/notes", "Notes"], ["/todos", "To-dos"], ["/doubts", "Doubts"],
+      ["/practice", "Practice"], ["/pyq", "PYQ Find"], ["/teachers", "Konsa Teacher"],
+      ["/prepare-for-gate", "Prepare"], ["/share", "Share"],
+    ];
+    const sideLink = (href, label) =>
+      `<a class="side-link ${active === href ? "active" : ""}" href="${href}"><span class="ic">${NAV_ICONS[href] || "•"}</span><span>${label}</span></a>`;
+    const mainNav = mainItems.map(([h, l]) => sideLink(h, l)).join("");
+    const toolNav = toolItems.map(([h, l]) => sideLink(h, l)).join("");
+    const trial = trialActive();
+
     return `
     <div class="bg-grid"></div>
-    <div class="app-top">
-      <div class="container app-top-inner">
-        <a class="brand" href="/">${logoHTML(0.82)}</a>
-        <nav class="nav grow">${navLinks}
-          <div class="nav-more-wrap" data-wrap>
-            <a href="#" data-action="dropdown-toggle" data-target="more-menu" style="display:flex;align-items:center;gap:6px">More <span style="font-size:.7rem">▾</span></a>
-            <div class="dropdown" id="more-menu">${moreLinks}</div>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="side-brand">${logoHTML(0.85)}</div>
+        <div class="side-section">
+          <div class="side-title">Main</div>
+          ${mainNav}
+        </div>
+        <div class="side-section">
+          <div class="side-title">Tools</div>
+          ${toolNav}
+        </div>
+        <div class="side-spacer"></div>
+        ${trial ? "" : `
+        <div class="pro-card">
+          <div class="t">⚡ Go Pro</div>
+          <div class="p">Unlock every tool — from ₹29/month or ₹129 till GATE ${SITE.gateYear}.</div>
+          <a class="btn btn-primary btn-sm btn-block" href="/plans">Upgrade →</a>
+        </div>`}
+        <div class="nav-more-wrap" data-wrap>
+          <div class="side-user" data-action="dropdown-toggle" data-target="side-user-menu">
+            <span class="avatar ${u.google ? "avatar-google" : ""}" style="${u.google ? "" : "background:" + colorFor(u.username)}">${esc((u.name || u.username)[0].toUpperCase())}</span>
+            <div class="grow" style="min-width:0">
+              <div style="font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(u.name.split(" ")[0])}</div>
+              <div style="font-size:.72rem;color:var(--muted-2)">@${esc(u.username)}</div>
+            </div>
+            <span style="font-size:.7rem;color:var(--muted)">▾</span>
           </div>
-        </nav>
-        <div class="row" style="gap:10px">
-          <div class="nav-more-wrap" data-wrap>
-            <button class="btn btn-ghost btn-sm" data-action="dropdown-toggle" data-target="bell-menu" style="position:relative;padding:9px">${ICONS.bell}${unread ? `<span style="position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:var(--red)"></span>` : ""}</button>
-            <div class="dropdown" id="bell-menu" style="min-width:300px">${renderNotifications()}</div>
+          <div class="dropdown" id="side-user-menu" style="left:0;right:auto;bottom:calc(100% + 8px);top:auto">
+            <a href="/profile">👤 Profile</a>
+            <a href="/share">🔗 Text &amp; Link Share</a>
+            <a href="/thankyou">💚 Support the Project</a>
+            <div class="sep"></div>
+            <a href="#" data-action="logout">🚪 Log out</a>
+          </div>
+        </div>
+      </aside>
+      <div class="scrim" id="scrim" data-action="sidebar-close"></div>
+      <div class="main">
+        <header class="topbar">
+          <button class="icon-btn hamburger" data-action="sidebar-toggle" aria-label="Menu">☰</button>
+          <div class="crumb grow">G4Gate <span style="color:var(--muted-2)">/</span> <b>${TITLE[active] || "Dashboard"}</b></div>
+          <div class="nav-more-wrap grow" style="max-width:320px" data-wrap>
+            <div class="search-box">🔍 <input id="global-search" type="text" placeholder="Search tools, notes, subjects…" autocomplete="off"></div>
+            <div class="dropdown" id="search-results" style="left:0;right:0;top:calc(100% + 6px)"></div>
           </div>
           <div class="nav-more-wrap" data-wrap>
-            <div class="user-chip" data-action="dropdown-toggle" data-target="user-menu">
+            <button class="icon-btn" data-action="dropdown-toggle" data-target="bell-menu" aria-label="Notifications">${ICONS.bell}${unread ? `<span class="dot-badge"></span>` : ""}</button>
+            <div class="dropdown" id="bell-menu" style="min-width:320px">${renderNotifications()}</div>
+          </div>
+          <div class="nav-more-wrap" data-wrap>
+            <div class="side-user" data-action="dropdown-toggle" data-target="top-user-menu" style="border:none;background:transparent;padding:4px">
               <span class="avatar ${u.google ? "avatar-google" : ""}" style="${u.google ? "" : "background:" + colorFor(u.username)}">${esc((u.name || u.username)[0].toUpperCase())}</span>
-              <span style="font-weight:600;font-size:.88rem">${esc(u.name.split(" ")[0])}</span>
               <span style="font-size:.7rem;color:var(--muted)">▾</span>
             </div>
-            <div class="dropdown" id="user-menu">
+            <div class="dropdown" id="top-user-menu">
               <a href="/profile">👤 Profile</a>
               <a href="/thankyou">💚 Support the Project</a>
               <div class="sep"></div>
               <a href="#" data-action="logout">🚪 Log out</a>
             </div>
           </div>
-          <button class="hamburger" data-action="mobile-toggle">☰</button>
-        </div>
+        </header>
+        <div class="content">${contentHTML}</div>
+        ${footerHTML()}
       </div>
-      <div class="mobile-nav hidden" id="mobile-nav">
-        ${main.map((n) => `<a href="${n.href}" class="${active === n.href ? "active" : ""}">${n.label}</a>`).join("")}
-        <div class="mobile-more">${tools.map(([l, h, ic]) => `<a href="${h}">${ic} ${l}</a>`).join("")}</div>
-        <a href="/profile">👤 Profile</a>
-        <a href="#" data-action="logout">🚪 Log out</a>
-      </div>
-    </div>
-    <div class="container page">${contentHTML}</div>
-    ${footerHTML()}`;
+    </div>`;
   }
 
   function notifyList() {
@@ -515,55 +562,74 @@
         <span class="muted">${fmtMin(s.minutes)}</span></div>`).join("");
 
     const pct = st.total ? Math.round((st.done / st.total) * 100) : 0;
+    const donutC = 2 * Math.PI * 48;
+    const donutOff = donutC * (1 - pct / 100);
 
     return appShell(`
-      <div class="page-head">
+      <section class="hero mb-3">
         <div>
-          <h1>${greet}, ${esc(u.name.split(" ")[0])} 👋</h1>
-          <p>${trial ? '<span class="pill pill-green">✦ 21-day Pro trial active</span> ' : ""}Keep pushing toward GATE ${SITE.gateYear}.</p>
-        </div>
-        <a class="btn btn-primary" href="/timer">▶ Start a Focus Session</a>
-      </div>
-
-      <div class="card mb-2">
-        <div class="row" style="gap:18px;flex-wrap:wrap">
-          <div class="grow">
-            <div class="eyebrow">GATE ${SITE.gateYear} Countdown</div>
-            <h2 style="margin-top:6px">${daysToExam()} days to go</h2>
-          </div>
-          <div class="countdown" id="countdown">
-            <div class="cd-unit"><div class="n" data-c="d">–</div><div class="l">Days</div></div>
-            <div class="cd-unit"><div class="n" data-c="h">–</div><div class="l">Hrs</div></div>
-            <div class="cd-unit"><div class="n" data-c="m">–</div><div class="l">Min</div></div>
-            <div class="cd-unit"><div class="n" data-c="s">–</div><div class="l">Sec</div></div>
+          <div class="eyebrow">GATE ${SITE.gateYear} · ${daysToExam()} days to go</div>
+          <h1 style="margin-top:10px">${greet}, ${esc(u.name.split(" ")[0])} 👋</h1>
+          <p class="muted" style="margin-top:8px">${trial ? '<span class="pill pill-green">✦ 21-day Pro trial active</span> ' : ""}Stay consistent, track your progress, and get where you're going.</p>
+          <div class="row" style="gap:10px;margin-top:18px;flex-wrap:wrap">
+            <a class="btn btn-primary btn-lg" href="/timer">▶ Start a Focus Session</a>
+            <a class="btn btn-ghost btn-lg" href="/syllabus">📚 Open Syllabus</a>
           </div>
         </div>
-      </div>
+        <div class="countdown" id="countdown">
+          <div class="cd-unit"><div class="n" data-c="d">–</div><div class="l">Days</div></div>
+          <div class="cd-unit"><div class="n" data-c="h">–</div><div class="l">Hrs</div></div>
+          <div class="cd-unit"><div class="n" data-c="m">–</div><div class="l">Min</div></div>
+          <div class="cd-unit"><div class="n" data-c="s">–</div><div class="l">Sec</div></div>
+        </div>
+      </section>
 
       <div class="stats-grid mb-3">
-        <div class="stat acc"><div class="k">Study Hours</div><div class="v">${st.hours.toFixed(1)}</div><div class="s">${st.sessions.length} sessions logged</div></div>
-        <div class="stat"><div class="k">Questions Solved</div><div class="v">${st.answered}</div><div class="s">${st.correct} correct</div></div>
-        <div class="stat"><div class="k">Day Streak</div><div class="v">🔥 ${st.streak}</div><div class="s">${st.streak ? "keep it alive!" : "log a session today"}</div></div>
-        <div class="stat"><div class="k">Syllabus</div><div class="v">${pct}%</div><div class="s">${st.done}/${st.total} topics done</div></div>
+        <div class="stat acc">
+          <div class="k"><span class="ic">⏱️</span> Study Hours</div>
+          <div class="v">${st.hours.toFixed(1)}</div>
+          <div class="s">${st.sessions.length} sessions logged</div>
+        </div>
+        <div class="stat">
+          <div class="k"><span class="ic">🧩</span> Questions Solved</div>
+          <div class="v">${st.answered}</div>
+          <div class="s">${st.correct} correct</div>
+        </div>
+        <div class="stat">
+          <div class="k"><span class="ic">🔥</span> Day Streak</div>
+          <div class="v">${st.streak}</div>
+          <div class="s">${st.streak ? "keep it alive!" : "log a session today"}</div>
+        </div>
+        <div class="stat">
+          <div class="k"><span class="ic">🎯</span> Syllabus</div>
+          <div class="donut-wrap" style="margin-top:8px">
+            <svg class="donut" width="68" height="68" viewBox="0 0 106 106">
+              <defs><linearGradient id="donutGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+              <circle class="track" cx="53" cy="53" r="48"></circle>
+              <circle class="val" cx="53" cy="53" r="48" stroke-dasharray="${donutC}" stroke-dashoffset="${donutOff}"></circle>
+            </svg>
+            <div><div class="v" style="font-size:1.35rem;margin-top:0">${pct}%</div><div class="s" style="margin-top:0">${st.done}/${st.total} topics</div></div>
+          </div>
+        </div>
       </div>
 
-      <h3 class="mb-1">All Tools</h3>
+      <div class="row mb-2" style="justify-content:space-between"><h3>All Tools</h3><a class="link" href="/plans">See what's included →</a></div>
       <div class="tool-grid mb-3">${tools}</div>
 
       <div class="grid-2 mb-3">
-        <div class="card">
-          <h3 class="mb-2">Study Heatmap</h3>
+        <div class="card card-hover">
+          <h3 class="mb-2">📆 Study Heatmap <span class="muted" style="font-weight:500;font-size:.8rem">· last 120 days</span></h3>
           <div class="heatmap">${heat}</div>
           <div class="heat-legend">Less <span class="day"></span><span class="day l1"></span><span class="day l2"></span><span class="day l3"></span><span class="day l4"></span> More</div>
         </div>
-        <div class="card">
-          <h3 class="mb-2">Growth Tree · last 8 weeks</h3>
+        <div class="card card-hover">
+          <h3 class="mb-2">🌱 Growth Tree <span class="muted" style="font-weight:500;font-size:.8rem">· last 8 weeks</span></h3>
           <div class="tree">${tree}</div>
         </div>
       </div>
 
       <div class="card">
-        <div class="row mb-2"><h3>Recent Sessions</h3><a class="link" href="/timer">Open timer →</a></div>
+        <div class="row mb-2"><h3>🕑 Recent Sessions</h3><a class="link" href="/timer">Open timer →</a></div>
         ${recent || `<div class="empty"><span class="ic">⏱️</span>No sessions yet — start your first focus session!</div>`}
       </div>`);
   }
@@ -845,7 +911,7 @@
       return `<div class="rank-row ${top}">
         <span class="rank-no">${medal || r.rank}</span>
         <span class="avatar" style="${r.me ? "" : "background:" + colorFor(r.name) + ";color:#04100c"}">${esc(r.name[0].toUpperCase())}</span>
-        <span class="name">${esc(r.name)}</span>
+        <span class="name" data-action="profile-view" data-name="${esc(r.name)}" data-hours="${r.hours}" data-questions="${r.questions}" data-streak="${r.streak}">${esc(r.name)}</span>
         <span class="stat">🔥 ${r.streak}</span>
         <span class="stat"><b>${val.toLocaleString()}</b> ${metric === "hours" ? "hrs" : "ques"}</span>
       </div>`;
@@ -1015,6 +1081,39 @@
         <table class="table"><thead><tr><th>Subject</th><th>Your chosen resource</th></tr></thead><tbody>${rows}</tbody></table>
         <p class="muted" style="font-size:.82rem;margin-top:12px">Pre-filled with free, official NPTEL (IIT) courses. Pick what works best for you.</p>
       </div>`, "/teachers");
+  }
+
+  /* ----- Text & Link Share ----- */
+  function renderShare() {
+    const st = getState();
+    const shares = (st.shares || []).slice().reverse();
+    const list = shares.map((s) => `
+      <div class="list-item">
+        <div class="grow">
+          <div class="row" style="gap:8px"><span class="pill pill-blue">${s.kind === "link" ? "🔗 Link" : "📝 Text"}</span>${s.tag ? `<span class="tag-chip on">#${esc(s.tag)}</span>` : ""}</div>
+          <p style="margin:8px 0 0;color:#c7d0e4;word-break:break-word">${esc(s.body)}</p>
+          <div style="font-size:.74rem;color:var(--muted-2);margin-top:6px">${s.date}</div>
+        </div>
+        <div class="row" style="gap:6px">
+          <button class="btn btn-soft btn-sm" data-action="share-copy" data-id="${s.id}">Copy</button>
+          <button class="btn btn-danger btn-sm" data-action="share-delete" data-id="${s.id}">✕</button>
+        </div>
+      </div>`).join("");
+    return appShell(`
+      <div class="page-head"><div><h1>Text & Link Share</h1><p>Keep your notes, links and resources handy — copy them in one tap.</p></div></div>
+      <div class="card mb-3">
+        <h3 class="mb-2">New share</h3>
+        <form data-form="add-share">
+          <div class="field">
+            <label>Type</label>
+            <select class="input" name="kind"><option value="text">Text</option><option value="link">Link</option></select>
+          </div>
+          <div class="field"><label>Tag (optional)</label><input class="input" name="tag" placeholder="e.g. revision, os-notes"></div>
+          <div class="field"><label>Text or link</label><textarea class="input" name="body" placeholder="Paste text or a link…" required></textarea></div>
+          <button class="btn btn-primary" type="submit">Save</button>
+        </form>
+      </div>
+      ${list || `<div class="empty"><span class="ic">🔗</span>Nothing shared yet — save your first note or link above.</div>`}`, "/share");
   }
 
   /* ----- How to prepare ----- */
@@ -1299,6 +1398,11 @@
       u.name = field(f, "fullname").trim() || u.name;
       LS.saveUsers(users); render(); toast("Profile updated");
     },
+    "add-share"(f) {
+      const st = getState(); st.shares = st.shares || [];
+      st.shares.push({ id: uid(), kind: field(f, "kind"), tag: field(f, "tag").trim().toLowerCase(), body: field(f, "body").trim(), date: todayStr(), at: Date.now() });
+      setState({ shares: st.shares }); render(); toast("Saved to your shares");
+    },
   };
 
   const ACTIONS = {
@@ -1331,7 +1435,9 @@
         setState({ notifSeen: seen });
       }
     },
-    "mobile-toggle"() { $("#mobile-nav").classList.toggle("hidden"); },
+    "mobile-toggle"() { const s = $("#sidebar"); if (s) s.classList.toggle("open"); $("#scrim")?.classList.toggle("show"); },
+    "sidebar-toggle"() { const s = $("#sidebar"); if (s) s.classList.toggle("open"); $("#scrim")?.classList.toggle("show"); },
+    "sidebar-close"() { $("#sidebar")?.classList.remove("open"); $("#scrim")?.classList.remove("show"); },
     "timer-toggle"() { Timer.running ? Timer.pause() : Timer.start(); },
     "timer-reset"() { Timer.reset(); },
     "timer-preset"(t) { Timer.setPreset(Number(t.dataset.sec), t.dataset.label); $$(".preset").forEach((p) => p.classList.remove("active")); t.classList.add("active"); },
@@ -1495,6 +1601,34 @@
       LS.saveState(me(), {});
       render(); toast("All data reset");
     },
+    "share-copy"(t) {
+      const st = getState();
+      const s = (st.shares || []).find((x) => x.id === t.dataset.id);
+      if (!s) return;
+      const done = () => toast("Copied to clipboard!");
+      if (navigator.clipboard) navigator.clipboard.writeText(s.body).then(done).catch(() => done());
+      else done();
+    },
+    "share-delete"(t) {
+      const st = getState();
+      st.shares = (st.shares || []).filter((x) => x.id !== t.dataset.id);
+      setState({ shares: st.shares }); render();
+    },
+    "profile-view"(t) {
+      const name = t.dataset.name;
+      openModal(`
+        <div class="center">
+          <span class="avatar" style="width:64px;height:64px;font-size:1.6rem;margin:0 auto;background:${colorFor(name)}">${esc(name[0].toUpperCase())}</span>
+          <h3 class="mt-2">${esc(name)}</h3>
+          <p class="muted" style="margin:2px 0 14px">Public profile</p>
+          <div class="stats-grid" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="stat"><div class="k">Hours</div><div class="v">${esc(t.dataset.hours)}</div></div>
+            <div class="stat"><div class="k">Questions</div><div class="v">${esc(t.dataset.questions)}</div></div>
+            <div class="stat"><div class="k">Streak</div><div class="v">🔥 ${esc(t.dataset.streak)}</div></div>
+          </div>
+          <button class="btn btn-primary mt-2" data-action="close-modal">Close</button>
+        </div>`);
+    },
   };
 
   /* trial helpers */
@@ -1551,7 +1685,7 @@
   });
 
   /* ---------------- router ---------------- */
-  const AUTH_ROUTES = ["/", "/timer", "/tests", "/calendar", "/syllabus", "/leaderboard", "/notes", "/todos", "/doubts", "/pyq", "/practice", "/teachers", "/prepare-for-gate", "/profile"];
+  const AUTH_ROUTES = ["/", "/timer", "/tests", "/calendar", "/syllabus", "/leaderboard", "/notes", "/todos", "/doubts", "/pyq", "/practice", "/teachers", "/prepare-for-gate", "/profile", "/share"];
   const TITLES = {
     "/": "Dashboard | G4Gate",
     "/login": "Login | G4Gate",
@@ -1571,6 +1705,7 @@
     "/teachers": "Konsa Teacher | G4Gate",
     "/prepare-for-gate": "Prepare | G4Gate",
     "/profile": "Profile | G4Gate",
+    "/share": "Text & Link Share | G4Gate",
   };
 
   let countdownTimer = null;
@@ -1580,6 +1715,8 @@
     if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
     $$(".dropdown").forEach((d) => d.classList.remove("open"));
     $("#mobile-nav")?.classList.add("hidden");
+    $("#sidebar")?.classList.remove("open");
+    $("#scrim")?.classList.remove("show");
 
     const isPublic = ["/login", "/signup", "/forgot-password", "/about", "/contact", "/privacy-policy", "/terms-and-conditions", "/cancellation-and-refund", "/shipping-and-delivery", "/plans", "/thankyou"].includes(path);
 
@@ -1618,6 +1755,7 @@
     else if (path === "/teachers") html = renderTeachers();
     else if (path === "/prepare-for-gate") html = renderPrepare();
     else if (path === "/profile") html = renderProfile();
+    else if (path === "/share") html = renderShare();
     else html = render404();
 
     document.title = TITLES[path] || (isPublic ? "G4Gate — Study Tracker for GATE and DSA Aspirants" : "G4Gate");
@@ -1675,6 +1813,29 @@
     if (!e.target.closest("[data-wrap]")) {
       $$(".dropdown").forEach((d) => d.classList.remove("open"));
     }
+  });
+
+  /* ---------------- global search ---------------- */
+  const SEARCH_INDEX = [
+    ...D.nav.map((n) => ({ label: n.label, href: n.href, icon: "📄" })),
+    ...D.tools.map((t) => ({ label: t.label, href: t.href, icon: t.icon })),
+    ...D.syllabus.map((s) => ({ label: s.name + " · syllabus", href: "/syllabus", icon: s.icon })),
+  ];
+  document.addEventListener("input", (e) => {
+    if (e.target.id !== "global-search") return;
+    const q = e.target.value.trim().toLowerCase();
+    const box = $("#search-results");
+    if (!box) return;
+    if (!q) { box.classList.remove("open"); box.innerHTML = ""; return; }
+    const hits = SEARCH_INDEX
+      .filter((x) => x.label.toLowerCase().includes(q))
+      .slice(0, 8);
+    if (!hits.length) {
+      box.innerHTML = `<div class="muted" style="padding:12px 14px;font-size:.86rem">No results for “${esc(q)}”</div>`;
+    } else {
+      box.innerHTML = hits.map((h) => `<a href="${h.href}">${h.icon} ${esc(h.label)}</a>`).join("");
+    }
+    box.classList.add("open");
   });
 
   /* boot */
