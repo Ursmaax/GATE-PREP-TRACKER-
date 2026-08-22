@@ -587,17 +587,17 @@
       <div class="stats-grid mb-3">
         <div class="stat acc">
           <div class="k"><span class="ic">⏱️</span> Study Hours</div>
-          <div class="v">${st.hours.toFixed(1)}</div>
+          <div class="v" data-count="${st.hours.toFixed(1)}" data-decimals="1">${st.hours.toFixed(1)}</div>
           <div class="s">${st.sessions.length} sessions logged</div>
         </div>
         <div class="stat">
           <div class="k"><span class="ic">🧩</span> Questions Solved</div>
-          <div class="v">${st.answered}</div>
+          <div class="v" data-count="${st.answered}">${st.answered}</div>
           <div class="s">${st.correct} correct</div>
         </div>
         <div class="stat">
           <div class="k"><span class="ic">🔥</span> Day Streak</div>
-          <div class="v">${st.streak}</div>
+          <div class="v" data-count="${st.streak}">${st.streak}</div>
           <div class="s">${st.streak ? "keep it alive!" : "log a session today"}</div>
         </div>
         <div class="stat">
@@ -608,7 +608,7 @@
               <circle class="track" cx="53" cy="53" r="48"></circle>
               <circle class="val" cx="53" cy="53" r="48" stroke-dasharray="${donutC}" stroke-dashoffset="${donutOff}"></circle>
             </svg>
-            <div><div class="v" style="font-size:1.35rem;margin-top:0">${pct}%</div><div class="s" style="margin-top:0">${st.done}/${st.total} topics</div></div>
+            <div><div class="v" data-count="${pct}" data-suffix="%" style="font-size:1.35rem;margin-top:0">${pct}%</div><div class="s" style="margin-top:0">${st.done}/${st.total} topics</div></div>
           </div>
         </div>
       </div>
@@ -653,6 +653,7 @@
       this.pause();
       this.log(Math.round(this.total / 60));
       beep();
+      confetti();
       toast(`Focus session complete — ${fmtMin(this.total / 60)} logged for ${this.subject}!`);
     },
     reset() { this.pause(); this.remaining = this.total; this.updateDom(); },
@@ -1453,6 +1454,7 @@
       t.classList.toggle("done");
       const status = t.querySelector(".status");
       if (status) { status.textContent = syl[id] ? "Done" : "Not started"; status.className = "status " + (syl[id] ? "st-done" : "st-not"); }
+      if (syl[id]) confetti();
       toast(syl[id] ? "Topic completed 🎉" : "Topic unmarked");
       render();
     },
@@ -1563,6 +1565,7 @@
     "practice-next"() { if (quiz) { quiz.idx++; quiz.picked = null; quiz.done = false; render(); } },
     "practice-finish"() {
       const st = getState();
+      confetti();
       toast(`Set complete — ${st.practice?.correct || 0} correct so far. Keep going!`);
       quiz = null; render();
     },
@@ -1761,7 +1764,7 @@
     $("#app").innerHTML = html;
 
     // post-render hooks
-    if (path === "/") startCountdown();
+    if (path === "/") { startCountdown(); countUp(); }
     if (path === "/timer") Timer.updateDom();
     window.scrollTo(0, 0);
   }
@@ -1836,6 +1839,47 @@
     }
     box.classList.add("open");
   });
+
+  /* ---------------- confetti & count-up ---------------- */
+  function confetti() {
+    try {
+      const colors = ["#10b981", "#22d3ee", "#8b5cf6", "#f59e0b", "#ef4444", "#34d399"];
+      const root = document.createElement("div");
+      root.style.cssText = "position:fixed;inset:0;pointer-events:none;z-index:300;overflow:hidden";
+      document.body.appendChild(root);
+      for (let i = 0; i < 70; i++) {
+        const p = document.createElement("div");
+        const size = 6 + Math.random() * 6;
+        p.style.cssText = `position:absolute;top:-20px;left:${Math.random() * 100}%;width:${size}px;height:${size * 0.6}px;background:${colors[i % colors.length]};border-radius:2px;transform:rotate(${Math.random() * 360}deg)`;
+        root.appendChild(p);
+        const drift = Math.random() * 160 - 80;
+        const anim = p.animate([
+          { transform: "translateY(-20px) rotate(0deg)", opacity: 0.95 },
+          { transform: `translateY(${(window.innerHeight || 800) + 60}px) translateX(${drift}px) rotate(${360 + Math.random() * 360}deg)`, opacity: 0 },
+        ], { duration: 1200 + Math.random() * 1100, easing: "cubic-bezier(.2,.6,.4,1)" });
+        anim.onfinish = () => p.remove();
+      }
+      setTimeout(() => root.remove(), 2600);
+    } catch { /* ignore */ }
+  }
+
+  function countUp() {
+    $$("[data-count]").forEach((el) => {
+      const target = parseFloat(el.dataset.count);
+      const dec = Number(el.dataset.decimals || 0);
+      const suffix = el.dataset.suffix || "";
+      const dur = 900;
+      const t0 = performance.now();
+      const step = (now) => {
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = target * eased;
+        el.textContent = val.toFixed(dec) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }
 
   /* boot */
   render();
