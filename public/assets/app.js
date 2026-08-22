@@ -1234,14 +1234,13 @@
             <h3 class="mt-2">${p.foot[2]}</h3>
           </div>
         </div>
-        <div class="row center" style="gap:18px;justify-content:center;flex-wrap:wrap;font-size:.85rem">
+        <div class="row center" style="gap:18px;justify-content:center;flex-wrap:wrap;font-size:.85rem;padding-bottom:40px">
           <a class="link-muted" href="/cancellation-and-refund">Refund policy</a>
           <a class="link-muted" href="/terms-and-conditions">Terms</a>
           <a class="link-muted" href="/privacy-policy">Privacy</a>
           <a class="link-muted" href="/thankyou">Need help?</a>
         </div>
       </div>
-      ${footerHTML()}
     </div>`;
   }
 
