@@ -1,0 +1,14 @@
+# dependencies / build
+node_modules/
+.next/
+dist/
+build/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# scratch & generated artifacts (e.g. AI image-search downloads)
+image-search/
+*.local
